@@ -17,10 +17,16 @@ configuration = config.get_plugin_entry_point(
     'plugin_test.normalizers:normalizer_entry_point'
 )
 
+class MyNormalizer(Normalizer):
+    def normalize(self, archive, logger):
+        logger.info('Normalizing data')
 
-class NewNormalizer(Normalizer):
-    def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        super().normalize(archive, logger)
-        logger.info('NewNormalizer.normalize', parameter=configuration.parameter)
-        if archive.results and archive.results.material:
-            archive.results.material.elements = ['C', 'O']
+        if not archive.metadata.instrument:
+            archive.metadata.instrument = 'Unknown Instrument'
+            logger.warning('Instrument not provided, set to "Unknown Instrument".')
+
+        for signal in archive.signals:
+            if not hasattr(signal, 'unit'):
+                signal.unit = 'arbitrary_unit'
+                logger.info(f'Unit for {signal.name} set to "arbitrary_unit"')
+

@@ -19,40 +19,41 @@ from nomad.datamodel.metainfo.workflow import Workflow
 from nomad.parsing.parser import MatchingParser
 from nomad.datamodel.results import Results, Properties
 
+from plugin_test.schema_packages.mypackage import Experiment, Metadata, Signal
+
 configuration = config.get_plugin_entry_point(
-    'plugin_test.parsers:parser'
+    'plugin_test.parsers:parser_entry_point'
 )
 
-
-class NewParser(MatchingParser):
-    def parse(self, mainfile: str, archive: EntryArchive, logger=None, child_archives=None) -> None:
+class MyParser(MatchingParser):
+    def parse(self,
+              mainfile: str,
+              archive: 'EntryArchive',
+              logger: 'BoundLogger',
+              child_archives: dict[str, 'EntryArchive'] = None) -> None:
         self.logger = logging.getLogger(__name__) if logger is None else logger
+
+        experiment = archive.m_create(Experiment)
 
         with open(mainfile, 'r') as f:
             content = f.read()
 
-        # Extract metadata
-        author = re.search(r'^\w+ \w+ \w+', content).group(0)
-        instrument = re.search(r'^Oscilloscope.*', content, re.MULTILINE).group(0)
+        lines = content.splitlines()
+
+        author = lines[0].strip()
+        instrument = lines[1].strip()
         n_signals = int(re.search(r'N = (\d+)', content).group(1))
         n_points = int(re.search(r'Nt = (\d+)', content).group(1))
 
-        # Create sections in the archive
-        archive.metadata.author = author
-        archive.metadata.instrument = instrument
-        archive.metadata.n_signals = n_signals
-        archive.metadata.n_points = n_points
+        experiment.metadata = Metadata()
+        experiment.metadata.author = author
+        experiment.metadata.instrument = instrument
+        experiment.metadata.n_signals = n_signals
+        experiment.metadata.n_points = n_points
 
-        # Extract signal data
         signal_data = re.findall(r'CH\d+:\s*(.+)', content)
 
         for i, signal in enumerate(signal_data, start=1):
-            signal_values = list(map(float, signal.split(',')))
-            setattr(archive, f'signal_{i}', signal_values)
-
-        # Populate results
-        results = Results()
-        properties = Properties()
-        properties.n_calculations = n_signals
-        results.properties = properties
-        archive.results = results
+            signal_section = experiment.signals.m_create(Signal)
+            signal_section.name = f'CH{i}'
+            signal_section.data = list(map(float, signal.split(',')))
