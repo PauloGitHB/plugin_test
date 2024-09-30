@@ -4,7 +4,7 @@ from nomad.metainfo.metainfo import MSection, Quantity, SubSection
 from nomad.config import config
 
 configuration = config.get_plugin_entry_point(
-    'plugin_test.schema_packages:mypackage'
+    'plugin_test.schema_packages:schema_package_entry_point'
 )
 
 m_package = Schema()
