@@ -1,6 +1,5 @@
-import re
 import logging
-
+import re
 from typing import (
     TYPE_CHECKING,
 )
@@ -14,10 +13,7 @@ if TYPE_CHECKING:
     )
 
 from nomad.config import config
-
-from nomad.datamodel.metainfo.workflow import Workflow
 from nomad.parsing.parser import MatchingParser
-from nomad.datamodel.results import Results, Properties
 
 from plugin_test.schema_packages.mypackage import Experiment, Metadata, Signal
 
@@ -35,7 +31,7 @@ class MyParser(MatchingParser):
 
         experiment = archive.m_create(Experiment)
 
-        with open(mainfile, 'r') as f:
+        with open(mainfile) as f:
             content = f.read()
 
         lines = content.splitlines()

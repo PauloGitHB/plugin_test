@@ -3,12 +3,7 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import (
-        EntryArchive,
-    )
-    from structlog.stdlib import (
-        BoundLogger,
-    )
+    pass
 
 from nomad.config import config
 from nomad.normalizing import Normalizer

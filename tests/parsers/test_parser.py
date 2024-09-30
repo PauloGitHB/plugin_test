@@ -1,8 +1,11 @@
-import unittest
-import os
 import logging
+import os
+import unittest
+
 from nomad.datamodel.datamodel import EntryArchive
+
 from plugin_test.parsers.parser import MyParser
+
 
 class TestSimpleTextParser(unittest.TestCase):
 
@@ -11,7 +14,8 @@ class TestSimpleTextParser(unittest.TestCase):
         self.test_file = os.path.join(os.path.dirname(__file__), '../data/data.txt')
 
         # Vérifier que le fichier existe
-        self.assertTrue(os.path.exists(self.test_file), f"Le fichier {self.test_file} n'existe pas.")
+        self.assertTrue(os.path.exists(self.test_file),
+                        f"Le fichier {self.test_file} n'existe pas.")
 
         # Initialiser le parser et l'archive
         self.parser = MyParser()

@@ -1,7 +1,5 @@
-from nomad.metainfo import Quantity, MSection, SubSection, MEnum, MCategory, Section
-from nomad.datamodel.data import Schema
-from nomad.metainfo.metainfo import SchemaPackage, MSection, Quantity, SubSection
 from nomad.config import config
+from nomad.metainfo import MSection, Quantity, SchemaPackage, SubSection
 
 configuration = config.get_plugin_entry_point(
     'plugin_test.schema_packages:schema_package_entry_point'
@@ -26,8 +24,10 @@ class Signal(MSection):
     )
 
 class Experiment(MSection):
-    metadata = SubSection(sub_section=Metadata, description='Metadata for the experiment')
-    signals = SubSection(sub_section=Signal, repeats=True, description='List of signals')
+    metadata = SubSection(sub_section=Metadata,
+                          description='Metadata for the experiment')
+    signals = SubSection(sub_section=Signal,
+                         repeats=True, description='List of signals')
     description = Quantity(
         type=str, description='Experiment'
     )
