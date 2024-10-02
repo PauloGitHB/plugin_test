@@ -1,7 +1,7 @@
-import logging
 import re
-import numpy as np
 from typing import TYPE_CHECKING
+
+import numpy as np
 
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import EntryArchive
@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 from nomad.config import config
 from nomad.parsing.parser import MatchingParser
+
 from plugin_test.schema_packages.mypackage import TemporalWaveform
 
 configuration = config.get_plugin_entry_point(
@@ -60,7 +61,7 @@ class MyParser(MatchingParser):
         schema_instance.signals = np.zeros((num_signals, num_points))
 
         for i in range(num_signals):
-            signal_name = lines[data_start_index + 2 * i].strip()
+           # signal_name = lines[data_start_index + 2 * i].strip()
             signal_data = [float(val)
                            for val in lines[data_start_index + 2 * i + 1].split(',')]
 

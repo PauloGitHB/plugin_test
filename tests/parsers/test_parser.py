@@ -1,8 +1,11 @@
-from plugin_test.parsers.parser import MyParser
-import os
 import json
 import logging
+import os
+
 from nomad.datamodel.datamodel import EntryArchive
+
+from plugin_test.parsers.parser import MyParser
+
 
 def test_parser():
     parser = MyParser()

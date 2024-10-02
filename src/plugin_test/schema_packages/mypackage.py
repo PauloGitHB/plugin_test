@@ -1,10 +1,8 @@
-from nomad.config import config
-from nomad.metainfo import MSection, Quantity, SchemaPackage, SubSection
-from nomad.datamodel.datamodel import EntryArchive, EntryData
-from nomad.datamodel.data import Schema
-from nomad.datamodel.metainfo.basesections import Measurement, Instrument, Results
 import numpy as np
-
+from nomad.config import config
+from nomad.datamodel.data import Schema
+from nomad.datamodel.metainfo.basesections import Instrument, Measurement
+from nomad.metainfo import Quantity, SchemaPackage
 
 configuration = config.get_plugin_entry_point(
     'plugin_test.schema_packages:schema_package_entry_point'
