@@ -12,6 +12,15 @@ m_package = SchemaPackage()
 
 
 class TemporalWaveform(Schema,Measurement,Instrument):
+
+    data_file = Quantity(
+        type=str,
+        description='The recipe file for the sintering process.',
+        a_eln={
+            "component": "FileEditQuantity",
+        },
+    )
+
     author = Quantity(
         type=str,
         description='The name of the author of the data file'
