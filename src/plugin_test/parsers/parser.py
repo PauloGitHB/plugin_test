@@ -18,12 +18,12 @@ configuration = config.get_plugin_entry_point(
 
 
 class MyParser(MatchingParser):
-    def __init__(self):
+    """def __init__(self):
         super().__init__(
             mainfile_name_re=r'.*\.txt$',
             mainfile_mime_re=r'text/.*',
             mainfile_contents_re=r'.*',
-        )
+        )"""
 
     def parse(self,
               mainfile: str,
