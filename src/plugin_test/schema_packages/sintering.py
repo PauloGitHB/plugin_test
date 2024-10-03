@@ -1,20 +1,18 @@
+import re
 from typing import (
     TYPE_CHECKING,
 )
 
-from nomad.config import config
-import re
-
-from nomad.metainfo import SchemaPackage
 import numpy as np
+from nomad.config import config
 from nomad.datamodel.data import (
     ArchiveSection,
     EntryData,
 )
-from nomad.datamodel.metainfo.basesections import Measurement,MeasurementResult
+from nomad.datamodel.metainfo.basesections import Measurement, MeasurementResult
 from nomad.metainfo import (
-    Package,
     Quantity,
+    SchemaPackage,
     Section,
     SubSection,
 )
