@@ -113,8 +113,8 @@ where = ["src"]
 [project.entry-points.'nomad.plugin']
 parser_entry_point = "plugin_test.parsers:parser_entry_point"
 schema_package_entry_point = "plugin_test.schema_packages:schema_package_entry_point"
-# normalizer_entry_point = "plugin_test.normalizers:normalizer_entry_point"
-# app_entry_point = "plugin_test.apps:app_entry_point"
+normalizer_entry_point = "plugin_test.normalizers:normalizer_entry_point"
+app_entry_point = "plugin_test.apps:app_entry_point"
 
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues
