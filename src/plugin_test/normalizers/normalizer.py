@@ -24,5 +24,3 @@ class MyNormalizer(Normalizer):
             if not hasattr(signal, 'unit'):
                 signal.unit = 'arbitrary_unit'
                 logger.info(f'Unit for {signal.name} set to "arbitrary_unit"')
-
-s

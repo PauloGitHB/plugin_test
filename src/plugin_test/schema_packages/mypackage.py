@@ -1,20 +1,18 @@
 from typing import (
-     TYPE_CHECKING,
- )
+    TYPE_CHECKING,
+)
 
 import numpy as np
 from nomad.config import config
-from nomad.datamodel.data import Schema,EntryData
-from nomad.datamodel.metainfo.basesections import Instrument,Measurement, ArchiveSection
+from nomad.datamodel.data import EntryData
+from nomad.datamodel.metainfo.basesections import (
+    Instrument,
+    Measurement,
+)
 from nomad.metainfo import Quantity, SchemaPackage
 
 if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import (
-        EntryArchive,
-    )
-    from structlog.stdlib import (
-        BoundLogger,
-    )
+    pass
 
 configuration = config.get_plugin_entry_point(
     'plugin_test.schema_packages:schema_package_entry_point'
