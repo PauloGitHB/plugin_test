@@ -6,18 +6,22 @@ import numpy as np
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import EntryArchive
     from structlog.stdlib import BoundLogger
+    from nomad.datamodel.metainfo.basesections import InstrumentReference
 
 from nomad.config import config
 from nomad.parsing.parser import MatchingParser
 
-from plugin_test.schema_packages.mypackage import TemporalWaveform
+from plugin_test.schema_packages.waveform_package import (
+    TemporalWaveform,
+    Waveform
+)
 
 configuration = config.get_plugin_entry_point(
     'plugin_test.parsers:parser_entry_point'
 )
 
 
-class MyParser(MatchingParser):
+class OscilloscopeParser(MatchingParser):
     """def __init__(self):
         super().__init__(
             mainfile_name_re=r'.*\.txt$',
@@ -34,6 +38,7 @@ class MyParser(MatchingParser):
             lines = file.readlines()
 
         schema_instance = TemporalWaveform()
+        schema_instance.results = Waveform()
 
         author = lines[0].strip()
         instrument = lines[1].strip()
@@ -42,29 +47,33 @@ class MyParser(MatchingParser):
         delta_t = float(re.search(r'[\d.]+', lines[4]).group())
 
         schema_instance.author = author
+
+        # instrument_object = InstrumentReference()
+        # instrument_object.name = instrument
+
+        # if archive.results.eln.instruments is None:
+        #     archive.results.eln.instruments =[]
+        # archive.results.eln.instruments.append(instrument_object)
+
         schema_instance.instrument = instrument
-        """schema_instance.instrument.name = instrument
-        archive.results.eln.instruments.append(instrument)"""
 
         schema_instance.num_signals = num_signals
         schema_instance.num_points = num_points
         schema_instance.delta_t = delta_t
 
-        schema_instance.results.name = "Here is a description of the results"
-
         data_start_index = next(i for i, line in enumerate(lines)
                                 if line.startswith('*')) + 1
 
 
-        """comment utiliser results"""
-
-        schema_instance.signals = np.zeros((num_signals, num_points))
+        schema_instance.results.amplitude = np.zeros((num_points))
+        schema_instance.results.time = np.zeros((num_points))
 
         for i in range(num_signals):
-           # signal_name = lines[data_start_index + 2 * i].strip()
-            signal_data = [float(val)
-                           for val in lines[data_start_index + 2 * i + 1].split(',')]
+            signal_data = [float(val) for val in lines[data_start_index + 2 * i + 1].split(',')]
 
-            schema_instance.signals[i, :] = signal_data
+            if i == 0:
+                schema_instance.results.amplitude = np.array(signal_data)
+            elif i == 1:
+                schema_instance.results.time = np.array(signal_data)
 
         archive.data = schema_instance

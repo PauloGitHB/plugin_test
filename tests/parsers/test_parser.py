@@ -4,11 +4,11 @@ import os
 
 from nomad.datamodel.datamodel import EntryArchive
 
-from plugin_test.parsers.parser import MyParser
+from plugin_test.parsers.parser import OscilloscopeParser
 
 
 def test_parser():
-    parser = MyParser()
+    parser = OscilloscopeParser()
     archive = EntryArchive()
     test_file = os.path.join(os.path.dirname(__file__),'../data/data.txt')
 
