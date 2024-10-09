@@ -67,3 +67,7 @@ class OscilloscopeParser(MatchingParser):
                 schema_instance.results.time = np.array(signal_data)
 
         archive.data = schema_instance
+
+    def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
+
+        super().normalize(archive, logger)

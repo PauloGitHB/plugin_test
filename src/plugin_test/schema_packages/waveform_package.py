@@ -109,6 +109,8 @@ class TemporalWaveform(Measurement, EntryData, ArchiveSection):
 
         super().normalize(archive, logger)
 
+
+
 class OscilloscopeMeasure(EntryData, ArchiveSection):
     m_def = Section()
     steps = SubSection(
