@@ -6,7 +6,7 @@ class MySchemaPackageEntryPoint(SchemaPackageEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
-        from plugin_test.schema_packages.mypackage import m_package
+        from plugin_test.schema_packages.waveform_package import m_package
 
         return m_package
 
