@@ -55,18 +55,16 @@ class OscilloscopeParser(MatchingParser):
                                 if line.startswith('*')) + 1
 
 
-        schema_instance.results.amplitude = np.zeros(num_points)
-        schema_instance.results.time = np.zeros(num_points)
+        schema_instance.res.amplitude = np.zeros(num_points)
+        schema_instance.res.time = np.zeros(num_points)
 
         for i in range(num_signals):
             signal_data = [float(val) for val in lines[data_start_index + 2 * i + 1].split(',')]
 
             if i == 0:
-                schema_instance.results.amplitude = np.array(signal_data)
+                schema_instance.res.amplitude = np.array(signal_data)
             elif i == 1:
-                schema_instance.results.time = np.array(signal_data)
-
-        schema_instance.results.name = "result"
+                schema_instance.res.time = np.array(signal_data)
 
         archive.data = schema_instance
 

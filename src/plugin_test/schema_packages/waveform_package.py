@@ -96,7 +96,7 @@ class TemporalWaveform(Measurement, EntryData, ArchiveSection):
         }
     )
 
-    results = SubSection(
+    res = SubSection(
         section_def=Waveform,
         description="""
         The result of the measurement.
