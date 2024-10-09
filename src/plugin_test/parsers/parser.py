@@ -6,15 +6,11 @@ import numpy as np
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import EntryArchive
     from structlog.stdlib import BoundLogger
-    from nomad.datamodel.metainfo.basesections import InstrumentReference
 
 from nomad.config import config
 from nomad.parsing.parser import MatchingParser
 
-from plugin_test.schema_packages.waveform_package import (
-    TemporalWaveform,
-    Waveform
-)
+from plugin_test.schema_packages.waveform_package import TemporalWaveform, Waveform
 
 configuration = config.get_plugin_entry_point(
     'plugin_test.parsers:parser_entry_point'
@@ -65,8 +61,8 @@ class OscilloscopeParser(MatchingParser):
                                 if line.startswith('*')) + 1
 
 
-        schema_instance.results.amplitude = np.zeros((num_points))
-        schema_instance.results.time = np.zeros((num_points))
+        schema_instance.results.amplitude = np.zeros(num_points)
+        schema_instance.results.time = np.zeros(num_points)
 
         for i in range(num_signals):
             signal_data = [float(val) for val in lines[data_start_index + 2 * i + 1].split(',')]

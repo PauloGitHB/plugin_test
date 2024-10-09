@@ -1,15 +1,13 @@
+import re
 from typing import (
     TYPE_CHECKING,
 )
 
-import re
 import numpy as np
-from nomad.config import config
 from nomad.datamodel.data import (
     ArchiveSection,
     EntryData,
 )
-
 from nomad.datamodel.metainfo.basesections import Measurement, MeasurementResult
 from nomad.metainfo import (
     Quantity,
@@ -25,6 +23,7 @@ if TYPE_CHECKING:
     from structlog.stdlib import (
         BoundLogger,
     )
+
     from plugin_test.parsers.parser import OscilloscopeParser
 
 
