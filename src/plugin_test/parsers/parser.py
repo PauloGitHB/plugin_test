@@ -28,7 +28,7 @@ class OscilloscopeParser(MatchingParser):
             lines = file.readlines()
 
         schema_instance = TemporalWaveform()
-        schema_instance.results = Waveform()
+        schema_instance.res = Waveform()
 
         author = lines[0].strip()
         instrument = lines[1].strip()
