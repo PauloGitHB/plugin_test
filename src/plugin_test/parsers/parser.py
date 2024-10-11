@@ -55,11 +55,14 @@ class OscilloscopeParser(MatchingParser):
 
         """instrument part"""
 
+
         oscilloscope = Oscilloscope()
 
         oscilloscope.n_channels = num_signals
         oscilloscope.name = instrument
 
+        schema_instance.instruments = []
+        schema_instance.instruments.append(oscilloscope)
 
         """channel part"""
 
