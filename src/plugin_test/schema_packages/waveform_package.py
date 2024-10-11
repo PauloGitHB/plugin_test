@@ -8,7 +8,11 @@ from nomad.datamodel.data import (
     ArchiveSection,
     EntryData,
 )
-from nomad.datamodel.metainfo.basesections import Measurement, MeasurementResult
+from nomad.datamodel.metainfo.basesections import (
+    Measurement,
+    MeasurementResult,
+    Instrument)
+
 from nomad.metainfo import (
     Quantity,
     SchemaPackage,
@@ -46,6 +50,15 @@ class Waveform(MeasurementResult, ArchiveSection):
 
 
 
+class Oscilloscope(Instrument,EntryData):
+     n_channels = Quantity(
+        type=int,
+        description='the number of channels fon this Instrument',
+         a_eln={
+            "component": "NumberEditQuantity"
+        }
+    )
+
 class TemporalWaveform(Measurement, EntryData, ArchiveSection):
     m_def = Section(
         a_eln={
@@ -67,23 +80,16 @@ class TemporalWaveform(Measurement, EntryData, ArchiveSection):
         description='The author for this measurement',
     )
 
-    instrument = Quantity(
-        type=str,
-        description='the instrument used in this experience'
-    )
-
-    num_signals = Quantity(
-        type=int,
-        description='the number of signals for this experience',
-         a_eln={
-            "component": "NumberEditQuantity"
-        }
+    instrument = SubSection(
+        section_def = Oscilloscope,
+        description="instrument used for this measurement",
+        repeats=False,
     )
 
     num_points = Quantity(
         type=int,
         description='The number of points',
-         a_eln={
+        a_eln={
             "component": "NumberEditQuantity"
         }
     )
@@ -91,17 +97,17 @@ class TemporalWaveform(Measurement, EntryData, ArchiveSection):
     delta_t = Quantity(
         type=np.float64,
         description='the delta of time for this experience',
-         a_eln={
+        a_eln={
             "component": "NumberEditQuantity"
         }
     )
 
-    res = SubSection(
+    channels = SubSection(
         section_def=Waveform,
         description="""
         The result of the measurement.
         """,
-        repeats=False,
+        repeats=True,
     )
 
 
@@ -141,15 +147,20 @@ class OscilloscopeMeasure(EntryData, ArchiveSection):
             parser = OscilloscopeParser()
             parser.parse(self.data_file,archive,logger)
 
+
             with open(self.data_file) as file:
                 lines = file.readlines()
+
+            steps = []
+
             step = TemporalWaveform()
             step.author = lines[0].strip()
-            step.instrument = lines[1].strip()
-            step.num_signals = int(re.search(r'\d+', lines[2]).group())
+            step.instrument.n_channel = int(re.search(r'\d+', lines[2]).group())
             step.num_points = int(re.search(r'\d+', lines[3]).group())
             step.delta_t = float(re.search(r'[\d.]+', lines[4]).group())
+            steps.append(step)
 
-            self.steps = step
+
+        self.steps = step
 
 m_package.__init_metainfo__()

@@ -2,20 +2,26 @@ import re
 from typing import TYPE_CHECKING
 
 import numpy as np
+import os
 
 if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import EntryArchive
+    from nomad.datamodel.datamodel import EntryArchive,EntryMetadata
     from structlog.stdlib import BoundLogger
 
 from nomad.config import config
+
 from nomad.parsing.parser import MatchingParser
 
-from plugin_test.schema_packages.waveform_package import TemporalWaveform, Waveform
+from plugin_test.schema_packages.waveform_package import (
+    TemporalWaveform,
+    Waveform,
+    Oscilloscope
+    )
+
 
 configuration = config.get_plugin_entry_point(
     'plugin_test.parsers:parser_entry_point'
 )
-
 
 class OscilloscopeParser(MatchingParser):
 
@@ -24,11 +30,15 @@ class OscilloscopeParser(MatchingParser):
               archive: 'EntryArchive',
               logger: 'BoundLogger' = None,
               child_archives: dict[str, 'EntryArchive'] = None) -> None:
+
+        if not mainfile or not os.path.exists(mainfile):
+            return
+
         with open(mainfile) as file:
             lines = file.readlines()
 
         schema_instance = TemporalWaveform()
-        schema_instance.res = Waveform()
+
 
         author = lines[0].strip()
         instrument = lines[1].strip()
@@ -38,33 +48,32 @@ class OscilloscopeParser(MatchingParser):
 
         schema_instance.author = author
 
-        # instrument_object = InstrumentReference()
-        # instrument_object.name = instrument
+        schema_instance.instrument = Oscilloscope()
 
-        # if archive.results.eln.instruments is None:
-        #     archive.results.eln.instruments =[]
-        # archive.results.eln.instruments.append(instrument_object)
+        schema_instance.instrument.n_channels = num_signals
+        schema_instance.instrument.name = instrument
 
-        schema_instance.instrument = instrument
-
-        schema_instance.num_signals = num_signals
         schema_instance.num_points = num_points
         schema_instance.delta_t = delta_t
 
         data_start_index = next(i for i, line in enumerate(lines)
                                 if line.startswith('*')) + 1
 
+        schema_instance.channels =[]
 
-        schema_instance.res.amplitude = np.zeros(num_points)
-        schema_instance.res.time = np.zeros(num_points)
+        for ind_channel in range(num_signals):
 
-        for i in range(num_signals):
-            signal_data = [float(val) for val in lines[data_start_index + 2 * i + 1].split(',')]
+            channel_name = lines[data_start_index + 2 * ind_channel].strip().replace(":", "")
 
-            if i == 0:
-                schema_instance.res.amplitude = np.array(signal_data)
-            elif i == 1:
-                schema_instance.res.time = np.array(signal_data)
+            signal_data = [float(val) for val in lines[data_start_index + 2 * ind_channel + 1].split(',')]
+
+            waveform = Waveform()
+
+            waveform.amplitude = np.array(signal_data)
+            waveform.time =  np.arange(0, num_points * delta_t, delta_t)
+            waveform.name = channel_name
+
+            schema_instance.channels.append(waveform)
 
         archive.data = schema_instance
 
