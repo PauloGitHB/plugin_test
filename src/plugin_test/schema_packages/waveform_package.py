@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 m_package = SchemaPackage()
 
 
-class Waveform(MeasurementResult, ArchiveSection):
+class Waveform(MeasurementResult):
     amplitude= Quantity(
         type=float,
         shape=['*'],
@@ -113,7 +113,7 @@ class TemporalWaveform(Measurement, EntryData, ArchiveSection):
         }
     )
 
-    channels = SubSection(
+    results = SubSection(
         section_def=Waveform,
         description="""
         The result of the measurement.

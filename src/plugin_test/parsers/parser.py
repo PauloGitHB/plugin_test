@@ -69,7 +69,7 @@ class OscilloscopeParser(MatchingParser):
         data_start_index = next(i for i, line in enumerate(lines)
                                 if line.startswith('*')) + 1
 
-        schema_instance.channels = []
+        schema_instance.results = []
 
         for ind_channel in range(num_signals):
 
@@ -83,7 +83,7 @@ class OscilloscopeParser(MatchingParser):
             waveform.time =  np.arange(0, num_points * delta_t, delta_t)
             waveform.name = channel_name
 
-            schema_instance.channels.append(waveform)
+            schema_instance.results.append(waveform)
 
         archive.data = schema_instance
 
