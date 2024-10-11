@@ -6,12 +6,14 @@ from typing import (
 import numpy as np
 from nomad.datamodel.data import (
     ArchiveSection,
-    EntryData,
+    EntryData
 )
 from nomad.datamodel.metainfo.basesections import (
     Measurement,
     MeasurementResult,
-    Instrument)
+    InstrumentReference,
+    Instrument,
+    ELNAnnotation)
 
 from nomad.metainfo import (
     Quantity,
@@ -48,15 +50,24 @@ class Waveform(MeasurementResult, ArchiveSection):
         unit='second'
     )
 
-
-
-class Oscilloscope(Instrument,EntryData):
-     n_channels = Quantity(
+class Oscilloscope(Instrument):
+    n_channels = Quantity(
         type=int,
         description='the number of channels fon this Instrument',
          a_eln={
             "component": "NumberEditQuantity"
         }
+    )
+
+
+class OscilloscopeReference(InstrumentReference):
+      reference = Quantity(
+        type=Oscilloscope,
+        description='A reference to a NOMAD `Instrument` entry.',
+        a_eln=ELNAnnotation(
+            component='ReferenceEditQuantity',
+            label='instrument reference',
+        ),
     )
 
 class TemporalWaveform(Measurement, EntryData, ArchiveSection):
@@ -80,10 +91,10 @@ class TemporalWaveform(Measurement, EntryData, ArchiveSection):
         description='The author for this measurement',
     )
 
-    instrument = SubSection(
-        section_def = Oscilloscope,
+    instruments = SubSection(
+        section_def = OscilloscopeReference,
         description="instrument used for this measurement",
-        repeats=False,
+        repeats=True,
     )
 
     num_points = Quantity(

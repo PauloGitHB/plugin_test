@@ -37,8 +37,8 @@ class OscilloscopeParser(MatchingParser):
         with open(mainfile) as file:
             lines = file.readlines()
 
-        schema_instance = TemporalWaveform()
 
+        """parsing"""
 
         author = lines[0].strip()
         instrument = lines[1].strip()
@@ -46,20 +46,27 @@ class OscilloscopeParser(MatchingParser):
         num_points = int(re.search(r'\d+', lines[3]).group())
         delta_t = float(re.search(r'[\d.]+', lines[4]).group())
 
+        """instanciation"""
+
+        schema_instance = TemporalWaveform()
         schema_instance.author = author
-
-        schema_instance.instrument = Oscilloscope()
-
-        schema_instance.instrument.n_channels = num_signals
-        schema_instance.instrument.name = instrument
-
         schema_instance.num_points = num_points
         schema_instance.delta_t = delta_t
+
+        """instrument part"""
+
+        oscilloscope = Oscilloscope()
+
+        oscilloscope.n_channels = num_signals
+        oscilloscope.name = instrument
+
+
+        """channel part"""
 
         data_start_index = next(i for i, line in enumerate(lines)
                                 if line.startswith('*')) + 1
 
-        schema_instance.channels =[]
+        schema_instance.channels = []
 
         for ind_channel in range(num_signals):
 
@@ -76,6 +83,9 @@ class OscilloscopeParser(MatchingParser):
             schema_instance.channels.append(waveform)
 
         archive.data = schema_instance
+
+
+    """fonction normalize"""
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
 
