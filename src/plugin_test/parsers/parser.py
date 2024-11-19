@@ -23,7 +23,7 @@ configuration = config.get_plugin_entry_point(
     'plugin_test.parsers:parser_entry_point'
 )
 
-class OscilloscopeParser(MatchingParser):
+class InstrumentParser(MatchingParser):
 
     def parse(self,
               mainfile: str,
