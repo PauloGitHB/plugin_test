@@ -6,13 +6,13 @@ class OscilloscopeEntryPoint(ParserEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
-        from plugin_test.parsers.parser import OscilloscopeParser
+        from plugin_test.parsers.parser import InstrumentParser
 
-        return OscilloscopeParser(**self.dict())
+        return InstrumentParser(**self.dict())
 
 
 parser_entry_point = OscilloscopeEntryPoint(
     name='MyParser',
     description='New parser entry point configuration.',
-    mainfile_name_re = "^data.*\\.txt$",
+   # mainfile_name_re = "^data.*\\.txt$",
 )
