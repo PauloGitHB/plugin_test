@@ -51,14 +51,7 @@ class WaveformXCoordinate(MSection):
         type=float,
         shape=['*'],
         description="the amplitude of the channel",
-        unit= unity
-    )
-
-    time=Quantity(
-        type=float,
-        shape=['*'],
-        description='the time of the channel',
-        unit='second'
+        unit= 'second'
     )
 
 class WaveformYCoordinate(MSection):
@@ -76,7 +69,7 @@ class WaveformYCoordinate(MSection):
         type=float,
         shape=['*'],
         description="the amplitude of the channel",
-        unit= unity
+        unit= 'volt'
     )
 
 
