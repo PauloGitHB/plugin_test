@@ -14,5 +14,5 @@ class OscilloscopeEntryPoint(ParserEntryPoint):
 parser_entry_point = OscilloscopeEntryPoint(
     name='MyParser',
     description='New parser entry point configuration.',
-    mainfile_name_re="^data.*\\.txt$",
+    mainfile_name_re="^data.*\.txt$",
 )
