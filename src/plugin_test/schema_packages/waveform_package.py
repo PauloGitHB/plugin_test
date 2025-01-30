@@ -20,7 +20,6 @@ from nomad.metainfo import (
     SchemaPackage,
     Section,
     SubSection,
-    MSection
 )
 
 if TYPE_CHECKING:
@@ -31,64 +30,24 @@ if TYPE_CHECKING:
         BoundLogger,
     )
 
-    from plugin_test.parsers.parser import InstrumentParser
+    from plugin_test.parsers.parser import OscilloscopeParser
 
 
 m_package = SchemaPackage()
 
-class WaveformXCoordinate(MSection):
-    name = Quantity(
-        type = str,
-        description = ""
-    )
-
-    unity = Quantity(
-        type = str,
-        description = ""
-    )
-
-    value = Quantity(
-        type=float,
-        shape=['*'],
-        description="the amplitude of the channel",
-        unit= 'second'
-    )
-
-class WaveformYCoordinate(MSection):
-    name = Quantity(
-        type = str,
-        description = ""
-    )
-
-    unity = Quantity(
-        type = str,
-        description = ""
-    )
-
-    value = Quantity(
-        type=float,
-        shape=['*'],
-        description="the amplitude of the channel",
-        unit= 'volt'
-    )
-
 
 class Waveform(MeasurementResult):
-    name = Quantity(
-        type = str,
-        description = ""
+    amplitude= Quantity(
+        type=float,
+        shape=['*'],
+        description="the amplitude of the channel",
+        unit="volt"
     )
-
-    x_coordinate = SubSection(
-        section_def = WaveformXCoordinate,
-        description = "",
-        repeats = False
-    )
-
-    y_coordinate = SubSection(
-        section_def = WaveformYCoordinate,
-        description = "",
-        repeats = False
+    time=Quantity(
+        type=float,
+        shape=['*'],
+        description='the time of the channel',
+        unit='second'
     )
 
 class Oscilloscope(Instrument):
@@ -196,7 +155,7 @@ class OscilloscopeMeasure(EntryData, ArchiveSection):
 
         super(OscilloscopeMeasure, self).normalize(archive, logger)
         if self.data_file:
-            parser = InstrumentParser()
+            parser = OscilloscopeParser()
             parser.parse(self.data_file,archive,logger)
 
 
